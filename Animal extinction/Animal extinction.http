@@ -1,0 +1,6 @@
+@Animal_extinction_HostAddress = http://localhost:5100
+
+GET {{Animal_extinction_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
