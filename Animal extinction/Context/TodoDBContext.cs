@@ -18,13 +18,10 @@ namespace Animal_extinction.Context
                 .Property(v => v.GeneticDiversity)
                 .HasColumnType("decimal(18,2)"); 
         }
-
-
         public DbSet<DetailObservations> detailObservations { get; set; } = null!;
         public DbSet<Observations> observations { get; set; } = null!;
         public DbSet<Species> species { get; set; } = null!;
         public DbSet<Threats> threats { get; set; } = null!;
         public DbSet<Viability> viability { get; set; } = null!;
-
     }
 }

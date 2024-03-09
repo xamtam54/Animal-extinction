@@ -30,6 +30,10 @@ namespace Animal_extinction.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetailObservationsId"));
 
+                    b.Property<string>("Behaviors")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateOnly>("ObservationDate")
                         .HasColumnType("date");
 
@@ -62,10 +66,6 @@ namespace Animal_extinction.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ObservationsId"));
 
-                    b.Property<string>("Behaviors")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("SpecieId")
                         .HasColumnType("int");
 
@@ -96,7 +96,12 @@ namespace Animal_extinction.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ViabilityId")
+                        .HasColumnType("int");
+
                     b.HasKey("SpeciesId");
+
+                    b.HasIndex("ViabilityId");
 
                     b.ToTable("species");
                 });
@@ -121,7 +126,12 @@ namespace Animal_extinction.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ViabilityId")
+                        .HasColumnType("int");
+
                     b.HasKey("ThreatsId");
+
+                    b.HasIndex("ViabilityId");
 
                     b.ToTable("threats");
                 });
@@ -144,21 +154,7 @@ namespace Animal_extinction.Migrations
                     b.Property<decimal>("ReproductionRate")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SpeciesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ThreatsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ThreatsLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ViabilityId");
-
-                    b.HasIndex("SpeciesId");
-
-                    b.HasIndex("ThreatsId");
 
                     b.ToTable("viability");
                 });
@@ -185,23 +181,26 @@ namespace Animal_extinction.Migrations
                     b.Navigation("Specie");
                 });
 
-            modelBuilder.Entity("Animal_extinction.Model.Viability", b =>
+            modelBuilder.Entity("Animal_extinction.Model.Species", b =>
                 {
-                    b.HasOne("Animal_extinction.Model.Species", "Species")
+                    b.HasOne("Animal_extinction.Model.Viability", "Viability")
                         .WithMany()
-                        .HasForeignKey("SpeciesId")
+                        .HasForeignKey("ViabilityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Animal_extinction.Model.Threats", "Threats")
+                    b.Navigation("Viability");
+                });
+
+            modelBuilder.Entity("Animal_extinction.Model.Threats", b =>
+                {
+                    b.HasOne("Animal_extinction.Model.Viability", "Viability")
                         .WithMany()
-                        .HasForeignKey("ThreatsId")
+                        .HasForeignKey("ViabilityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Species");
-
-                    b.Navigation("Threats");
+                    b.Navigation("Viability");
                 });
 #pragma warning restore 612, 618
         }

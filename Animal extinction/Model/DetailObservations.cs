@@ -7,6 +7,7 @@
         public required DateOnly ObservationDate { get; set; }
         public required string ObservationType { get; set; }
         public required string Ubication { get; set; }
+        public required string Behaviors { get; set; }
         public required Observations Observations { get; set; }
 
     }

@@ -6,5 +6,7 @@
         public required string NameThreats { get; set; }
         public required string DescriptionThreats { get; set; }
         public required string ThreatsLevel  { get; set; }
+        public required int ViabilityId { get; set; }
+        public required Viability Viability { get; set; }
     }
 }

@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Animal_extinction.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "viability",
+                columns: table => new
+                {
+                    ViabilityId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GeneticDiversity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ReproductionRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    GeneralViability = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_viability", x => x.ViabilityId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "species",
                 columns: table => new
@@ -19,11 +34,18 @@ namespace Animal_extinction.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NameSpecies = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConservationState = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ConservationState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ViabilityId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_species", x => x.SpeciesId);
+                    table.ForeignKey(
+                        name: "FK_species_viability_ViabilityId",
+                        column: x => x.ViabilityId,
+                        principalTable: "viability",
+                        principalColumn: "ViabilityId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,11 +56,18 @@ namespace Animal_extinction.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NameThreats = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionThreats = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThreatsLevel = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ThreatsLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ViabilityId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_threats", x => x.ThreatsId);
+                    table.ForeignKey(
+                        name: "FK_threats_viability_ViabilityId",
+                        column: x => x.ViabilityId,
+                        principalTable: "viability",
+                        principalColumn: "ViabilityId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,8 +76,7 @@ namespace Animal_extinction.Migrations
                 {
                     ObservationsId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SpecieId = table.Column<int>(type: "int", nullable: false),
-                    Behaviors = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SpecieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,36 +90,6 @@ namespace Animal_extinction.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "viability",
-                columns: table => new
-                {
-                    ViabilityId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SpeciesId = table.Column<int>(type: "int", nullable: false),
-                    ThreatsId = table.Column<int>(type: "int", nullable: false),
-                    ThreatsLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GeneticDiversity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ReproductionRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    GeneralViability = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_viability", x => x.ViabilityId);
-                    table.ForeignKey(
-                        name: "FK_viability_species_SpeciesId",
-                        column: x => x.SpeciesId,
-                        principalTable: "species",
-                        principalColumn: "SpeciesId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_viability_threats_ThreatsId",
-                        column: x => x.ThreatsId,
-                        principalTable: "threats",
-                        principalColumn: "ThreatsId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "detailObservations",
                 columns: table => new
                 {
@@ -101,6 +99,7 @@ namespace Animal_extinction.Migrations
                     ObservationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     ObservationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Ubication = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Behaviors = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ObservationsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -125,14 +124,14 @@ namespace Animal_extinction.Migrations
                 column: "SpecieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_viability_SpeciesId",
-                table: "viability",
-                column: "SpeciesId");
+                name: "IX_species_ViabilityId",
+                table: "species",
+                column: "ViabilityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_viability_ThreatsId",
-                table: "viability",
-                column: "ThreatsId");
+                name: "IX_threats_ViabilityId",
+                table: "threats",
+                column: "ViabilityId");
         }
 
         /// <inheritdoc />
@@ -142,16 +141,16 @@ namespace Animal_extinction.Migrations
                 name: "detailObservations");
 
             migrationBuilder.DropTable(
-                name: "viability");
+                name: "threats");
 
             migrationBuilder.DropTable(
                 name: "observations");
 
             migrationBuilder.DropTable(
-                name: "threats");
+                name: "species");
 
             migrationBuilder.DropTable(
-                name: "species");
+                name: "viability");
         }
     }
 }
