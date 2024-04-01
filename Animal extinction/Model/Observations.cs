@@ -2,8 +2,8 @@
 {
     public class Observations
     {
-        public required int ObservationsId { get; set; }
+        public int ObservationsId { get; set; }
         public required int SpecieId { get; set; }
-        public required Species Specie {get; set;} 
+        public Species? Specie {get; set;} 
     }
 }
