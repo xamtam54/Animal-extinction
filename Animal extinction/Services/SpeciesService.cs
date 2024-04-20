@@ -16,7 +16,7 @@ namespace Animal_extinction.Services
     {
         private readonly ISpeciesRepository _speciesRepository;
 
-        public SpeciesService(SpeciesRepository speciesRepository)
+        public SpeciesService(ISpeciesRepository speciesRepository)
         {
             _speciesRepository = speciesRepository;
         }

@@ -15,7 +15,7 @@ namespace Animal_extinction.Services
     public class DetailObservationsService : IDetailObservationsService
     {
         public readonly IDetailObservationsRepository _detailObservationsRepository;
-        public DetailObservationsService(DetailObservationsRepository detailObservationsRepository)
+        public DetailObservationsService(IDetailObservationsRepository detailObservationsRepository)
         {
             _detailObservationsRepository = detailObservationsRepository;
         }
@@ -58,5 +58,14 @@ namespace Animal_extinction.Services
 
             return null; 
         }
+        /*
+        public async Task<List<User>> DeleteUser(int id)
+        {
+            User user = await _detailObservationsRepository.GetUser(int);
+            //user.IsDeleted = true;
+            //user.date = DateTime.Now;
+
+            return await _repo.DeleteUserAsync(user);
+        }*/
     }
 }

@@ -15,7 +15,7 @@ namespace Animal_extinction.Services
     public class ObservationsService : IObservationsService
     {
         private readonly IObservationsRepository _observationsRepository;
-        public ObservationsService(ObservationsRepository observationsRepository)
+        public ObservationsService(IObservationsRepository observationsRepository)
         {
             _observationsRepository = observationsRepository;
         }

@@ -16,7 +16,7 @@ namespace Animal_extinction.Services
     {
         private readonly IViabilityRepository _viabilityRepository;
 
-        public ViabilityService(ViabilityRepository viabilityRepository)
+        public ViabilityService(IViabilityRepository viabilityRepository)
         {
             _viabilityRepository = viabilityRepository;
         }

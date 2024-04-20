@@ -18,7 +18,7 @@ namespace Animal_extinction.Services
     {
         private readonly IThreatsRepository _threatsRepository;
 
-        public ThreatsService(ThreatsRepository threatsRepository)
+        public ThreatsService(IThreatsRepository threatsRepository)
         {
             _threatsRepository = threatsRepository;
         }
